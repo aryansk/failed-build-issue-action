@@ -28,6 +28,13 @@ inputs:
     description: "Whether to create a new label for 'label-name' if it doesn't already exist."
     required: false
     default: true
+  label-color:
+    description: "Hex color (without the '#') used when creating the label. Ignored if the label already exists or create-label is false."
+    required: false
+    default: "B60205"
+  label-description:
+    description: "Description used when creating the label. Ignored if the label already exists or create-label is false."
+    required: false
   always-create-new-issue:
     description: "If true, will always create a new issue, even if one matching 'label-name' is already open."
     required: false

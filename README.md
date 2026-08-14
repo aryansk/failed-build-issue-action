@@ -190,11 +190,17 @@ If you need to inject data that isn't available from the context object within t
 
 ## Comments vs. new issues
 
+"Latest open issue" is defined by **created date**: the open issue with the `label-name` label that was created most recently (the action lists open labeled issues sorted by `created` descending and comments on the first one that is not a pull request). If you keep multiple labeled issues open, subsequent comments go to the newest one while older issues stay untouched.
+
 The default behavior of appending to the latest open `"build failed"` issue assumes that if the issue is still open, it is unaddressed and most likely the cause of the additional failure.
 
 If you would like to always create a new issue, set the parameter `always-create-new-issue` to `true`.
 
 If you are sticking with the default behavior of appending a comment to the latest open issue in general, but you have a particular case where you don't want it to append a comment and instead open a new issue, you can remove the `"build failed"` label from the open issue(s). One situation where you might want to do this is if you've temporarily fixed the cause of a failure, but you want to keep the issue open to track additional to-dos.
+
+When you create the label via the `create-label` input, its color comes from the `label-color` input (default `B60205`) and its description from `label-description`. Both are ignored if the label already exists.
+
+Note that finding an open issue and creating a new one is not atomic: if two failing workflow runs start at the same time and no labeled issue is open yet, both can create an issue. This is an accepted edge case — the outcome is one extra issue, not lost failure reports.
 
 ## Using with GitHub Projects
 

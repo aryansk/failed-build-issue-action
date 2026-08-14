@@ -13,6 +13,8 @@ describe("Test run", () => {
     'label-name': "build failed",
     'title-template': "Failed build: {{workflow}}",
     'body-template': "Build failed on {{refName}}.",
+    'label-color': "B60205",
+    'label-description': "Build failed",
   };
   const booleanInputs = {
     'create-label': true,
@@ -42,6 +44,8 @@ describe("Test run", () => {
       "Build failed on {{refName}}.",
       true,
       false,
+      "B60205",
+      "Build failed",
     );
     expect(core.setOutput).toHaveBeenCalledWith('issue-number', 100);
     expect(core.setOutput).toHaveBeenCalledWith('html-url', testHtmlUrl);

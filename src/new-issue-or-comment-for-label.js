@@ -41,7 +41,8 @@ const templateView = (context, ref) => ({
 });
 
 let newIssueOrCommentForLabel = async function (
-  githubToken, labelName, titleTemplate, bodyTemplate, createLabel, alwaysCreateNewIssue
+  githubToken, labelName, titleTemplate, bodyTemplate, createLabel, alwaysCreateNewIssue,
+  labelColor, labelDescription
 ) {
   // octokit client
   // https://octokit.github.io/rest.js/
@@ -57,6 +58,8 @@ let newIssueOrCommentForLabel = async function (
   core.debug("bodyTemplate: " + bodyTemplate)
   core.debug("createLabel: " + String(createLabel))
   core.debug("alwaysCreateNewIssue: " + String(alwaysCreateNewIssue))
+  core.debug("labelColor: " + String(labelColor))
+  core.debug("labelDescription: " + String(labelDescription))
   core.debug("view: " + JSON.stringify(view))
 
   core.info("Checking if label '" + labelName + "' exists...")
@@ -73,11 +76,16 @@ let newIssueOrCommentForLabel = async function (
       core.info("Label '" + labelName + "' not found.")
       if (createLabel) {
         core.info("Creating label '" + labelName + "'...")
-        const create_label_response = await octokit.rest.issues.createLabel({
-          owner,
-          repo,
-          name: labelName,
-        });
+        // A color and description make the auto-created label deterministic instead
+        // of getting a random color and no description from GitHub.
+        const createLabelPayload = { owner, repo, name: labelName };
+        if (labelColor !== undefined) {
+          createLabelPayload.color = labelColor;
+        }
+        if (labelDescription !== undefined) {
+          createLabelPayload.description = labelDescription;
+        }
+        const create_label_response = await octokit.rest.issues.createLabel(createLabelPayload);
         core.debug("create_label_response:\n" + JSON.stringify(create_label_response))
       } else {
         throw new Error(`Label "${labelName}" not found and createLabel = false.`, { cause: error });
